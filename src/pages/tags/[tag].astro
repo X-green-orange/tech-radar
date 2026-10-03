@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { articleHref, byDate, dailyHref } from '../../lib/site';
+export async function getStaticPaths() {
+  const dailies = await getCollection('daily');
+  const articles = await getCollection('articles');
+  const tags = [...new Set([...dailies.flatMap((d) => [...d.data.tags, ...d.data.items.flatMap((i) => i.tags)]), ...articles.flatMap((a) => a.data.tags)])];
+  return tags.map((tag) => ({ params: { tag }, props: { tag, dailies, articles } }));
+}
+const { tag, dailies, articles } = Astro.props;
+const matchingDailies = byDate(dailies.filter((d: any) => d.data.tags.includes(tag) || d.data.items.some((i: any) => i.tags.includes(tag))));
+const matchingArticles = byDate(articles.filter((a: any) => a.data.tags.includes(tag)));
+---
+<Base title={`#${tag}`}><div class="page-intro wrap"><div class="section-kicker">TOPIC FILTER</div><h1>#{tag}</h1><p>与这一主题相关的日报和长文。</p></div><div class="wrap listing"><h2 class="listing-title">日报</h2>{matchingDailies.map((daily: any) => <a class="listing-row" href={dailyHref(daily.id)}><time>{daily.data.date}</time><div><strong>{daily.data.title}</strong><p>{daily.data.summary}</p></div><span>阅读 ↗</span></a>)}<h2 class="listing-title">长文</h2>{matchingArticles.map((article: any) => <a class="listing-row" href={articleHref(article.id)}><time>{article.data.date}</time><div><strong>{article.data.title}</strong><p>{article.data.summary}</p></div><span>阅读 ↗</span></a>)}</div></Base>

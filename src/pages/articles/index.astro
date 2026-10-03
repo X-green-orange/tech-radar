@@ -1,0 +1,7 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { articleHref, byDate, tagHref } from '../../lib/site';
+const articles = byDate(await getCollection('articles'));
+---
+<Base title="长文分析"><div class="page-intro wrap"><div class="section-kicker">LONG READS</div><h1>长文分析</h1><p>从一条新动态出发，写清变化、机制、同类产品与使用场景。</p></div><div class="wrap feature-grid listing-grid">{articles.map((article, i) => <a class="feature-card" href={articleHref(article.id)}><span class="feature-index">{String(i + 1).padStart(2, '0')} / ANALYSIS</span><h2>{article.data.title}</h2><p>{article.data.summary}</p><span class="feature-meta">{article.data.date}<span>阅读全文 ↗</span></span></a>)}</div></Base>

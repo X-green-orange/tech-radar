@@ -1,0 +1,7 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { byDate, dailyHref } from '../../lib/site';
+const dailies = byDate(await getCollection('daily'));
+---
+<Base title="日报归档" description="Agent 技术雷达每日技术简报归档。"><div class="page-intro wrap"><div class="section-kicker">DAILY ARCHIVE</div><h1>日报归档</h1><p>每一期保留发布日期、入选动态和原始来源，方便追溯技术变化。</p></div><div class="wrap listing">{dailies.map((daily) => <a class="listing-row" href={dailyHref(daily.id)}><time>{daily.data.date}</time><div><strong>{daily.data.title}</strong><p>{daily.data.summary}</p></div><span>{daily.data.items.length} 条动态 ↗</span></a>)}</div></Base>

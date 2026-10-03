@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StoryCard from '../components/StoryCard.astro';
+import { articleHref, byDate, dailyHref, diveHref, href } from '../lib/site';
+
+const dailies = byDate(await getCollection('daily'));
+const articles = byDate(await getCollection('articles'));
+const dives = byDate(await getCollection('deep-dives'));
+const latest = dailies[0];
+---
+<Base>
+  <section class="hero wrap">
+    <div class="hero-copy"><div class="section-kicker"><span class="pulse"></span> INDEPENDENT AI BRIEFING <span class="kicker-line"></span> 北京时间更新</div>
+      <h1>看清技术变化，<br /><span>不只追逐热度。</span></h1>
+      <p>追踪智能体、大模型与开发工具的新进展。每条动态回到原始证据，每篇长文讲清产品做了什么、为何出现，以及它在同类技术中的位置。</p>
+      <div class="hero-actions"><a class="button-primary" href={latest ? dailyHref(latest.id) : href('archive/')}>阅读最新一期 <span>↗</span></a><a class="text-button" href={href('archive/')}>浏览全部日报 <span>→</span></a></div>
+    </div>
+    <div class="hero-art" aria-hidden="true"><div class="radar-orbit orbit-one"></div><div class="radar-orbit orbit-two"></div><div class="radar-orbit orbit-three"></div><div class="radar-cross cross-x"></div><div class="radar-cross cross-y"></div><div class="radar-sweep"></div><div class="radar-core"></div><span class="radar-point point-a"></span><span class="radar-point point-b"></span><span class="radar-point point-c"></span><span class="art-caption">SIGNAL / NOISE</span></div>
+  </section>
+
+  <section class="content-section wrap" id="latest"><div class="section-heading"><div><div class="section-kicker">01 / DAILY SIGNAL</div><h2>最新技术动态</h2><p>按发布日期与可核查证据筛选，而非只看热榜排名。</p></div><a class="heading-link" href={href('archive/')}>全部日报 <span>→</span></a></div>
+    {latest ? <><div class="issue-bar"><span class="issue-date">{latest.data.date}</span><strong>{latest.data.title}</strong><span>{latest.data.items.length} 条动态</span><a href={dailyHref(latest.id)}>完整日报 ↗</a></div><div class="story-list">{latest.data.items.map((item, i) => <StoryCard item={item} index={i} />)}</div></> : <p>首期日报即将发布。</p>}
+  </section>
+
+  <section class="feature-band"><div class="wrap"><div class="section-heading"><div><div class="section-kicker">02 / LONG READS</div><h2>从动态走向理解</h2><p>以原始资料为起点，展开机制、同类比较与应用场景。</p></div><a class="heading-link" href={href('articles/')}>全部长文 <span>→</span></a></div><div class="feature-grid">{articles.slice(0, 3).map((article, i) => <a class="feature-card" href={articleHref(article.id)}><span class="feature-index">0{i + 1} / ANALYSIS</span><h3>{article.data.title}</h3><p>{article.data.summary}</p><span class="feature-meta">{article.data.date}<span>阅读全文 ↗</span></span></a>)}</div></div></section>
+
+  <section class="content-section wrap deep-preview"><div class="section-heading"><div><div class="section-kicker">03 / DEEP DIVES</div><h2>每周深度解析</h2><p>由读者指定主题，围绕机制、证据与实际选型深入展开。</p></div><a class="heading-link" href={href('deep-dives/')}>进入专栏 <span>→</span></a></div>{dives.length ? dives.slice(0, 2).map((dive) => <a class="dive-row" href={diveHref(dive.id)}><span>{dive.data.date}</span><strong>{dive.data.title}</strong><span>阅读分析 ↗</span></a>) : <div class="empty-panel">专栏准备中。选题将在 <a href="https://github.com/X-green-orange/tech-radar/issues">GitHub Issues</a> 中提出与追踪。</div>}</section>
+</Base>

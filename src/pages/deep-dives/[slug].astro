@@ -1,0 +1,9 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { tagHref } from '../../lib/site';
+export async function getStaticPaths() { return (await getCollection('deep-dives')).map((entry) => ({ params: { slug: entry.id }, props: { entry } })); }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} description={entry.data.summary}><div class="article-head wrap"><div class="section-kicker">DEEP DIVE / {entry.data.date}</div><h1>{entry.data.title}</h1><p class="deck">{entry.data.summary}</p><div class="article-head-bottom"><div class="tags">{entry.data.tags.map((tag: string) => <a href={tagHref(tag)}>#{tag}</a>)}</div><a href={`https://github.com/X-green-orange/tech-radar/issues/${entry.data.issue}`} target="_blank" rel="noopener noreferrer">选题 Issue #{entry.data.issue} ↗</a></div></div><div class="article-layout wrap"><article class="prose"><Content /></article><aside class="article-aside"><div class="aside-title">原始资料</div>{entry.data.sources.map((source: { label: string; url: string }) => <a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a>)}</aside></div></Base>

@@ -1,0 +1,35 @@
+---
+import { href } from '../lib/site';
+import '../styles/global.css';
+
+const { title = 'Agent 技术雷达', description = '智能体与大模型技术简报：有来源的每日动态与长文分析。' } = Astro.props;
+const fullTitle = title === 'Agent 技术雷达' ? title : `${title} · Agent 技术雷达`;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b1422" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header wrap">
+        <a class="brand" href={href()} aria-label="Agent 技术雷达首页"><span class="brand-mark">✳</span><span>Agent <em>技术雷达</em></span></a>
+        <nav aria-label="主导航">
+          <a href={href()}>首页</a>
+          <a href={href('archive/')}>日报归档</a>
+          <a href={href('articles/')}>长文</a>
+          <a href={href('deep-dives/')}>深度解析</a>
+        </nav>
+      </header>
+      <main><slot /></main>
+      <footer class="site-footer wrap">
+        <div><span class="brand-mark">✳</span> Agent 技术雷达 <span class="muted">/ 聚焦 Agent、LLM 与开发工具</span></div>
+        <a href="https://github.com/X-green-orange/tech-radar" target="_blank" rel="noopener noreferrer">在 GitHub 查看本站 ↗</a>
+      </footer>
+    </div>
+  </body>
+</html>

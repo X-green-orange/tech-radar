@@ -1,0 +1,7 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { byDate, diveHref } from '../../lib/site';
+const dives = byDate(await getCollection('deep-dives'));
+---
+<Base title="每周深度解析"><div class="page-intro wrap"><div class="section-kicker">DEEP DIVES</div><h1>每周深度解析</h1><p>主题由你提出。文章经审核后发布，保留对应选题与来源。</p></div><div class="wrap listing">{dives.length ? dives.map((dive) => <a class="listing-row" href={diveHref(dive.id)}><time>{dive.data.date}</time><div><strong>{dive.data.title}</strong><p>{dive.data.summary}</p></div><span>阅读分析 ↗</span></a>) : <div class="empty-panel">第一篇深度解析尚在筹备。你可以在 <a href="https://github.com/X-green-orange/tech-radar/issues">GitHub Issues</a> 提出选题。</div>}</div></Base>

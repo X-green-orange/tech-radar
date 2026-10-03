@@ -1,0 +1,16 @@
+---
+import { articleHref, tagHref } from '../lib/site';
+const { item, index = 0 } = Astro.props;
+const target = item.article ? articleHref(item.article) : item.sources[0].url;
+const external = !item.article;
+---
+<article class="story-card">
+  <div class="story-number">{String(index + 1).padStart(2, '0')}</div>
+  <div class="story-main">
+    <div class="eyebrow"><span>{item.type}</span><span class="dot">·</span><time>{item.published}</time></div>
+    <h3><a href={target} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{item.title}<span class="link-arrow"> ↗</span></a></h3>
+    <p>{item.summary}</p>
+    <p class="story-value">{item.value}</p>
+    <div class="card-bottom"><div class="tags">{item.tags.map((tag: string) => <a href={tagHref(tag)}>#{tag}</a>)}</div><a class="source-link" href={item.sources[0].url} target="_blank" rel="noopener noreferrer">原始来源 ↗</a></div>
+  </div>
+</article>

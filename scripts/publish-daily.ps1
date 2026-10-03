@@ -26,6 +26,8 @@ foreach ($articleId in $articleIds) {
   if (-not (Test-Path -LiteralPath $articleFile)) { throw "关联长文不存在：$articleFile" }
   $paths += $articleFile
 }
+node scripts/check-sources.mjs $paths
+if ($LASTEXITCODE -ne 0) { throw '来源链接检查失败，停止发布' }
 $untracked = @(git ls-files --others --exclude-standard)
 $unexpected = @($untracked | Where-Object { $_ -notin $paths })
 if ($unexpected.Count -gt 0) { throw "工作区存在与当日发布无关的未跟踪文件：$($unexpected -join ', ')" }

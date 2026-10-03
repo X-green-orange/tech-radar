@@ -4,10 +4,11 @@
 
 ## 发现与筛选
 
-1. 检查官方产品更新、GitHub Releases 和已合并的重要 PR、arXiv/OpenReview、Hugging Face Daily Papers。用 GitHub Trending、Hacker News、Reddit 发现候选，但事实须回到原始发布、代码或论文。
-2. 对热榜项目核查最近 72 小时的实际发布或合并变化。累计 Stars 不是新闻。
-3. 合并转载与连续小版本；检查已有 `src/content/daily/`，同一事件不重复报道。持续发酵的话题可回看七天，但本期必须有新证据。
-4. 按相关性、变化实质性、开发者可用性和证据质量排序。没有合格事件时少写，不凑数。
+1. 以北京时间运行时刻向前 72 小时为常规窗口，记录每条候选的原始发布时间、来源、具体变化和可访问的直达链接。官方入口至少检查 [GitHub Changelog](https://github.blog/changelog/)、[OpenAI News](https://openai.com/news/)、[Anthropic News](https://www.anthropic.com/news)、[Google AI Blog](https://blog.google/technology/ai/)、[Hugging Face Blog](https://huggingface.co/blog)。这些入口用于导航，卡片应链接到具体发布页。
+2. 检查相关项目的 `https://github.com/<owner>/<repo>/releases`、`https://github.com/<owner>/<repo>/pulls?q=is%3Apr+is%3Amerged` 和仓库提交记录；论文从 [arXiv cs.AI recent](https://arxiv.org/list/cs.AI/recent)、[arXiv cs.CL recent](https://arxiv.org/list/cs.CL/recent)、[OpenReview](https://openreview.net/) 与 [Hugging Face Daily Papers](https://huggingface.co/papers) 发现，正文回到论文原页核查。
+3. 用 [GitHub Trending 今日榜](https://github.com/trending?since=daily)、[本周榜](https://github.com/trending?since=weekly)、[Hacker News](https://news.ycombinator.com/) 和相关 Reddit 社区发现讨论候选。热度只决定核查顺序；逐项核对最近 72 小时是否有实质 Release、已合并 PR、论文或官方公告。累计 Stars、单纯登榜和转帖都不是事件。
+4. 对延续七天内旧事件的话题，明确今天新增的官方证据。合并转载、同一产品变化及无实质差异的小版本；检索 `src/content/daily/` 的标题、来源 URL 和事件内容，避免重复报道。
+5. 每条候选以 0–3 分记录相关性、变化实质性、开发者可用性、来源质量四项；总分至少 8 分且来源质量至少 2 分才可入选。优先呈现对 Agent/LLM 开发实践有明确影响的变化；没有合格事件时少写或不发布，不凑数。
 
 ## 写稿
 
@@ -19,6 +20,6 @@
 
 ## 校验与上线
 
-运行 `npm run validate` 和 `npm run build`。检查每个来源是否能打开、是否直接支持相关句子，核对重复与时间窗口。失败时保留草稿并报告，不发布。
+运行 `npm run validate` 和 `npm run build`。`scripts/publish-daily.ps1` 会检查本期来源链接可达性；还须人工核对每个来源是否直接支持相关句子，以及重复和时间窗口。失败时保留草稿并报告，不发布。
 
 在独立 worktree 中工作，确认只改动本期日报与关联长文后执行 `./scripts/publish-daily.ps1 -Date YYYY-MM-DD`。脚本只允许快进推送到 `main`，不可强制推送或覆盖其他工作。发布后报告提交和 Pages 构建状态。

@@ -1,0 +1,20 @@
+name: 每周深度解析选题
+description: 提议一项需要机制分析与同类比较的 Agent / LLM 技术主题
+title: "[深度解析] "
+labels: [deep-dive-ready]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: 核心问题
+      description: 希望文章具体回答什么？
+      placeholder: 例如：某项新能力的机制、与同类方案的具体差异和适用场景
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: 可供核查的原始资料
+      description: 可填写官方发布、文档、代码或论文链接；编辑时仍会独立核对。
+    validations:
+      required: false
